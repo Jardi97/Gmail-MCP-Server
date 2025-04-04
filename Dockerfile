@@ -1,27 +1,20 @@
-FROM node:20-alpine
+# Usa una imagen de Node.js con soporte para TypeScript
+FROM node:18
 
+# Establece el directorio de trabajo
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
-
-# Install dependencies
-RUN npm install
-
-# Copy source code
+# Copia todos los archivos del repositorio
 COPY . .
 
-# Build the application
+# Instala las dependencias
+RUN npm install
+
+# Compila el código TypeScript
 RUN npm run build
 
-# Create data directory
-RUN mkdir -p /app/calendar-data
+# Expón el puerto (opcional, útil si usarás HTTP en el futuro)
+EXPOSE 3000
 
-# Set permissions for the data directory
-RUN chown -R node:node /app/calendar-data
-
-# Switch to non-root user
-USER node
-
-# Start the server
-CMD ["node", "build/index.js"]
+# Ejecuta el servidor
+CMD ["npm", "start"]
